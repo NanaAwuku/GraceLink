@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import PrivateHeader from "@/components/ui/PrivateHeader";
-import { useForm } from "react-hook-form";
+import { useForm , SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
