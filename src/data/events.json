@@ -1,0 +1,13 @@
+{
+    "events": [
+      {
+        "id": 1,
+        "title": "Sunday Service",
+        "date": "2025-03-20",
+        "time": "10:00 AM",
+        "location": "Main Auditorium",
+        "description": "Weekly church service."
+      }
+    ]
+  }
+  
