@@ -1,86 +1,69 @@
-export default function Registration() {
-    return (
-      <>
-        {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-        */}
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img
-              alt="Your Company"
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-              className="mx-auto h-10 w-auto"
-            />
-            <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-              Sign in to your account
-            </h2>
-          </div>
-  
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="#" method="POST" className="space-y-6">
-              <div>
-                <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-                  Email address
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
-              </div>
-  
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-                    Password
-                  </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    autoComplete="current-password"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
-              </div>
-  
-              <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Sign in
-                </button>
-              </div>
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import PrivateHeader from "@/components/ui/PrivateHeader";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+// ✅ Define Zod Schema for validation
+const schema = z.object({
+  username: z.string().min(3, { message: "Username must be at least 3 characters long" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+});
+
+// ✅ Define TypeScript Interface from Zod Schema
+type UserData = z.infer<typeof schema>;
+
+const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: UserData) => {
+    console.log("Form Submitted: ", data);
+  };
+
+  return (
+    <div>
+      <PrivateHeader />
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
+        <Card className="w-[350px] shadow-md">
+          <CardHeader>
+            <CardTitle className="text-center font-thin">Create Account</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4 mt-5">
+              {/* Username Field */}
+              <Input type="text" placeholder="Username" {...register("username")} />
+              {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
+
+              {/* Email Field */}
+              <Input type="email" placeholder="Email" {...register("email")} />
+              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+
+              {/* Password Field */}
+              <Input type="password" placeholder="Password" {...register("password")} />
+              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+
+              {/* Submit Button */}
+              <Button type="submit">Sign Up</Button>
+
+              <Link to="/" className="text-sm hover:underline font-thin text-gray-600">
+                Already have an account? Sign In
+              </Link>
             </form>
-  
-            <p className="mt-10 text-center text-sm/6 text-gray-500">
-              Not a member?{' '}
-              <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                Start a 14 day free trial
-              </a>
-            </p>
-          </div>
-        </div>
-      </>
-    )
-  }
-  
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default Register;
